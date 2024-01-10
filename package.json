@@ -1,0 +1,25 @@
+{
+  "name": "appsocketserver",
+  "version": "1.0.0",
+  "description": "sever for socket",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "test": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/didi9762/appSocketServer.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/didi9762/appSocketServer/issues"
+  },
+  "homepage": "https://github.com/didi9762/appSocketServer#readme",
+  "dependencies": {
+    "jsonwebtoken": "^9.0.2",
+    "ws": "^7.5.3"
+  }
+}
