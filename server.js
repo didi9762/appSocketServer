@@ -2,7 +2,6 @@ import WebSocket from "ws";
 import {updateOpenMissions,saveMission} from './openMissionsFunctions.js'
 import {verifyToken} from "./verify.js";
 
-const openMissions = new set()
 
 class Server {
   constructor() {

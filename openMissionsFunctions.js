@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const url = "";
+const url = "https://app-http-server.vercel.app";
 async function updateOpenMissions(newtask) {
   try {
     const response = await axios.post(`${url}/server/newtask`, {newtask:newtask});
