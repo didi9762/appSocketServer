@@ -1,6 +1,8 @@
 import WebSocket from "ws";
-import openMissions from "./openMissions.js";
+import {updateOpenMissions,saveMission} from './openMissionsFunctions.js'
 import {verifyToken} from "./verify.js";
+
+const openMissions = new set()
 
 class Server {
   constructor() {
@@ -38,20 +40,20 @@ class Server {
             this.clientsSend.add({ id: clientData.id, socket: socket });
             socket.addEventListener("message", (event) => {
               const data = JSON.parse(event.data);
-              openMissions.set(data.id, data);
-              console.log("open:", openMissions);
+              // openMissions.set(data.id, data);
+              updateOpenMissions(data)
               this.broadcast(JSON.stringify(data));
             });
           } else if (!clientData.send) {
             this.clientsGet.add({ id: clientData.id, socket: socket });
-            socket.addEventListener("message", (event) => {
+            socket.addEventListener("message", async(event) => {
               const data = JSON.parse(event.data);
               if (data.type === "save") {
                 console.log('try save');
-                const updateMission = openMissions.get(data.missionId);
-                if (!updateMission) {
+                const res =await saveMission(data.missionId)
+                if (!res) {
                   return;
-                } else if (updateMission.save) {
+                } else if (res === 'already-in-hold') {
                   socket.send(
                     JSON.stringify({type:'unsuccess',
                       message: "the mission is on hold try later",
@@ -59,22 +61,18 @@ class Server {
                   );
                   return;
                 } 
-                else if (updateMission.close) {
+                else if (res==='unsucces-close') {
                   socket.send(
                     JSON.stringify({type:'error', message: "mission already taken" })
                   );
                   return;
-                } else if (updateMission.open) {
+                } else if (res.message ==='hold-success') {
+                  const updateMission = res.mission
                   const sender = [...this.clientsSend].find(client => client.id === updateMission.sender);
-                if(!sender||!sender.socket){console.log('error sender');socket.send(JSON.stringify({type:'error',message:'cant hold mission, sender disconnect'}))}
+                if(!sender||!sender.socket){console.log('error sender disconnect');socket.send(JSON.stringify({type:'error',message:'mission hold but sender disconnect'}))}
                 
                 else{
                   socket.send(JSON.stringify({type:'success',message:'masseges sent to the sender wait for his answer'}))
-                  updateMission.save = true;
-                  updateMission.open = false;
-                  openMissions.set(data.missionId, updateMission);
-                
-                console.log("update mission:", updateMission);
                 sender.socket.send(JSON.stringify({'mission':updateMission.id,'client':clientData.detailes}))
                 this.broadcast(JSON.stringify(updateMission)); 
                 socket.send(JSON.stringify(updateMission));}}
