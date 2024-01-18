@@ -7,6 +7,6 @@ userName:String,
 password:String,
 group:Array,
 })
-const Users = mongoose.Model('usersGet',usersGetsSchema)
+const Users = mongoose.Model('userssends',usersGetsSchema)
 
 export default Users
