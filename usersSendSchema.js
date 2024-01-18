@@ -7,6 +7,6 @@ userName:String,
 password:String,
 group:Array,
 })
-const Users = mongoose.Model('usersSned',usersGetsSchema)
+const Users = mongoose.Model('userssends',usersGetsSchema)
 
 export default UsersSend
