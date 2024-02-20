@@ -3,7 +3,7 @@ import baseUrl from "./url.js";
 
 
 // const url = "https://app-http-server.vercel.app";
-const url = `http://${baseUrl}:12345`;
+const url = `http://${baseUrl}`;
 
 
 async function updateOpenMissions(newtask) {
