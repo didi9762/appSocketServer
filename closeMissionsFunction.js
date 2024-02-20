@@ -1,7 +1,7 @@
 import axios from "axios";
 import baseUrl from "./url.js";
 
-const url = `http://${baseUrl}:12345`;
+const url = `http://${baseUrl}`;
 
 async function addCloseMission(task){
     try{
