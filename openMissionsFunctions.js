@@ -38,5 +38,11 @@ async function closeMission(id){
   }catch(err){console.log('error try to hold task',err);}
 }
 
+async function addToHistory(userId,task){//add also adding task to sender history, right now os only for client
+  try{
+    const response = await axios.post(`${url}/server/addtasktohistory`,{userId:userId,task:task})
+    return response.data
+  }catch(err){console.log('error try add task to history:',err);}
+}
 
-export { updateMissionFunc, updateOpenMissions,saveMission,closeMission};
+export { updateMissionFunc, updateOpenMissions,saveMission,closeMission,addToHistory};
