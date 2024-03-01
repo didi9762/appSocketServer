@@ -17,14 +17,13 @@ class Server {
     this.server = new WebSocket.Server({ port: 8888 });
 
     this.server.on("connection", async (socket, req) => {
-      let verify = false
-      await verifyToken(req, connectUser);
+      const isvalid = await verifyToken(req, connectUser)
+      if(!isvalid){console.log('err'); socket.close();return}
       function connectUser(userVerify) {
         console.log('user:',userVerify);
         console.log(`Client try connect: ${socket._socket.remoteAddress}`);
-        verify = true
+        return true
       }
-      if(!verify){socket.close();return}
       socket.once("message", (event) => {
         try {
           const clientData = JSON.parse(event);
@@ -38,7 +37,6 @@ class Server {
             socket.send(
               JSON.stringify({ type: "note", message: "already connected" })
             );
-            socket.close();
             return;
           }
           console.log("Client details:", clientData.id, "connected");
@@ -84,7 +82,6 @@ class Server {
                 }
                 //handle reject save from sender
                 else if(data.type==='reject'){
-                  console.log(data);
                   const client = [...this.clientsGet].find(
                     (client) => client.id === data.client
                   );
