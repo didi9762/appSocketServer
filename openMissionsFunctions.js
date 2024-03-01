@@ -38,6 +38,13 @@ async function closeMission(id){
   }catch(err){console.log('error try to hold task',err);}
 }
 
+async function rejectSave(id){
+  try{
+  const response = await axios.put(`${url}/server/reject`,{missionId:id})
+  return response.data
+}catch(err){console.log('error try to hold task',err);}
+}
+
 async function addToHistory(userId,task){//add also adding task to sender history, right now os only for client
   try{
     const response = await axios.post(`${url}/server/addtasktohistory`,{userId:userId,task:task})
@@ -45,4 +52,4 @@ async function addToHistory(userId,task){//add also adding task to sender histor
   }catch(err){console.log('error try add task to history:',err);}
 }
 
-export { updateMissionFunc, updateOpenMissions,saveMission,closeMission,addToHistory};
+export { updateMissionFunc, updateOpenMissions,saveMission,closeMission,addToHistory,rejectSave};

@@ -10,8 +10,9 @@ const usersGetsSchema = new mongoose.Schema({
     phone:String,
     partners:Number,
     requests:Array,
-    tasksInProgress:[{type:Object}],
-    tasksHistory:[{type:Object}]
+    tasksInProgress:[],
+    tasksOpen:[],
+    tasksHistory:[]
 })
 const Users = mongoose.model('userssends',usersGetsSchema)
 
