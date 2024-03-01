@@ -4,6 +4,7 @@ import {
   updateOpenMissions,
   saveMission,
   closeMission,
+  rejectSave,
 } from "./openMissionsFunctions.js";
 import { verifyToken } from "./verify.js";
 import baseUrl from "./url.js";
@@ -16,14 +17,14 @@ class Server {
     this.server = new WebSocket.Server({ port: 8888 });
 
     this.server.on("connection", async (socket, req) => {
+      let verify = false
       await verifyToken(req, connectUser);
       function connectUser(userVerify) {
-        if (!userVerify) {
-          socket.close();
-          return;
-        }
+        console.log('user:',userVerify);
         console.log(`Client try connect: ${socket._socket.remoteAddress}`);
+        verify = true
       }
+      if(!verify){socket.close();return}
       socket.once("message", (event) => {
         try {
           const clientData = JSON.parse(event);
@@ -80,7 +81,35 @@ class Server {
                       })
                     );
                   }
-                } else if (data.type === "privet") {
+                }
+                //handle reject save from sender
+                else if(data.type==='reject'){
+                  console.log(data);
+                  const client = [...this.clientsGet].find(
+                    (client) => client.id === data.client
+                  );
+                  const res = await rejectSave(data.missionId)
+                  if(res==='ok'){
+                  try {
+                    client.socket.send(
+                      JSON.stringify({
+                        type: "reject",
+                        address:data.address,
+                        sender:data.sender
+                      })
+                    );
+                  } catch (e) {
+                    console.log(
+                      "error while tryng send the close message to client:",
+                      e
+                    );
+                  }}
+                  else {
+                    console.log('error try reject task saving:',res);
+                  }
+                }
+                
+                else if (data.type === "privet") {
                   updateOpenMissions(data.newTask);
                   this.broadcast(
                     JSON.stringify(data.newTask),
@@ -146,6 +175,7 @@ class Server {
                       JSON.stringify({
                         mission: updateMission.id,
                         client: data.userDetailes,
+                        address:updateMission.address
                       })
                     );
                     this.broadcast(JSON.stringify(updateMission));
@@ -161,8 +191,8 @@ class Server {
                     JSON.stringify({
                       type: "done",
                       missionId: data.missionId,
-                      message: "mission is done",
                       client: data.userDetailes,
+                      address:data.address
                     })
                   );
                 } else {
