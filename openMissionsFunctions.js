@@ -42,7 +42,7 @@ async function rejectSave(id){
   try{
   const response = await axios.put(`${url}/server/reject`,{missionId:id})
   return response.data
-}catch(err){console.log('error try to hold task',err);}
+}catch(err){console.log('error try to reject task:',err);}
 }
 
 async function addToHistory(userId,task){//add also adding task to sender history, right now os only for client
