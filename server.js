@@ -63,6 +63,8 @@ class Server {
                         JSON.stringify({
                           type: "close",
                           mission: data.missionId,
+                          sender:data.sender,
+                          address:data.address
                         })
                       );
                     } catch (e) {
@@ -82,6 +84,7 @@ class Server {
                 }
                 //handle reject save from sender
                 else if(data.type==='reject'){
+    
                   const client = [...this.clientsGet].find(
                     (client) => client.id === data.client
                   );
