@@ -17,9 +17,5 @@ try{
 }
 
 
-const generateToken = (userName) => {
-  const token = jwt.sign({ userName }, process.env.TOKEN_KEY, { expiresIn: '1h' });
-  return token;
-};
 
-export {verifyToken,generateToken}
+export {verifyToken}

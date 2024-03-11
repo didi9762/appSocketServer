@@ -50,14 +50,16 @@ class Server {
             socket.addEventListener("message", async (event) => {
               //event listners for new task from sender and to confirm saving
               const data = JSON.parse(event.data);
-              if (data.type) {
+                  if (data.type) {
                 //cofirm saving task and send massage to delivery guy
                 if (data.type === "confirm") {
                   const client = [...this.clientsGet].find(
                     (client) => client.id === data.client
                   );
+                  if(!client){console.log('client disconected');}
                   const res = await closeMission(data.missionId);
-                  if (res === "succes-close") {
+
+                  if (res === "succes-close"&&client) {
                     try {
                       client.socket.send(
                         JSON.stringify({
@@ -88,6 +90,7 @@ class Server {
                   const client = [...this.clientsGet].find(
                     (client) => client.id === data.client
                   );
+                  if(!client){console.log('client disconnected');}
                   const res = await rejectSave(data.missionId)
                   if(res==='ok'){
                   try {
@@ -100,7 +103,7 @@ class Server {
                     );
                   } catch (e) {
                     console.log(
-                      "error while tryng send the close message to client:",
+                      "error while trying send the close message to client:",
                       e
                     );
                   }}
@@ -175,7 +178,7 @@ class Server {
                       JSON.stringify({
                         mission: updateMission.id,
                         client: data.userDetailes,
-                        address:updateMission.address
+                        address:updateMission.destination
                       })
                     );
                     this.broadcast(JSON.stringify(updateMission));
@@ -271,7 +274,7 @@ class Server {
           }
         });
       } catch (err) {
-        console.log(console.log("error try post task to team:", err));
+        console.log("error try post task to team:", err);
       }
     } else {
       try {
