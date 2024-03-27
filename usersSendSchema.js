@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const usersGetsSchema = new mongoose.Schema({
+const usersSendSchema = new mongoose.Schema({
     firstName:String,
     lastName:String,
     userName:String,
@@ -8,12 +8,11 @@ const usersGetsSchema = new mongoose.Schema({
     address:String,
     group:Array,
     phone:String,
-    partners:Number,
     requests:Array,
     tasksInProgress:[],
     tasksOpen:[],
     tasksHistory:[]
 })
-const Users = mongoose.model('userssends',usersGetsSchema)
+const UsersSend = mongoose.model('userssends',usersSendSchema)
 
 export default UsersSend
