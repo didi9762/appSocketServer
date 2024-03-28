@@ -15,9 +15,11 @@ export default function sendEventListners(data,socket) {
 //function to handle new task and than call boardast function to post the task
 
 async function handleNewTask(data,socket) {
-    data.newTask.blockedUsers = []
+    const taskToSend = data.newTask
+    taskToSend.blockedUsers = []
     const res =await updateOpenMissions(data.newTask);
   socket.send(JSON.stringify({type:'update',id:res}))
+taskToSend._id=res
     broadcast(JSON.stringify(data.newTask));
   }
 
