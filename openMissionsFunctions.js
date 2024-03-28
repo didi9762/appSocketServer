@@ -36,7 +36,7 @@ async function closeMission(id){
   try{
       const response = await axios.put(`${url}/server/close`,{missionId:id})
       return response.data
-  }catch(err){console.log('error try to hold task',err);}
+  }catch(err){console.log('error try to close task',err);}
 }
 
 async function rejectSave(id,userName){
