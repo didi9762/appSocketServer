@@ -7,16 +7,17 @@ import {
 } from "./openMissionsFunctions.js";
 
 export default function sendEventListners(data,socket) {
-  if (data.type === "privet" || data.type === "public") handleNewTask(data);
+  if (data.type === "privet" || data.type === "public") handleNewTask(data,socket);
   else if (data.type === "confirm") handleConfirm(data,socket);
   else if (data.type === "reject") handleReject(data);
 }
 
 //function to handle new task and than call boardast function to post the task
 
-function handleNewTask(data) {
+async function handleNewTask(data,socket) {
     data.newTask.blockedUsers = []
-    updateOpenMissions(data.newTask);
+    const res =await updateOpenMissions(data.newTask);
+  socket.send(JSON.stringify({type:'update',id:res}))
     broadcast(JSON.stringify(data.newTask));
   }
 

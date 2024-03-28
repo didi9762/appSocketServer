@@ -16,7 +16,7 @@ class Server {
 
 function startServer() {
   const server = new Server();
-  console.log(`WebSocket server is running on ip:${baseUrl} port 8888`);
+  console.log(`WebSocket server is running on ip:${baseUrl.replace(':12345','')} port 8888`);
 }
 
 export default startServer;

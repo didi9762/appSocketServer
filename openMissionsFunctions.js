@@ -10,6 +10,7 @@ async function updateOpenMissions(newtask) {
   try {
     const response = await axios.post(`${url}/server/newtask`, {newtask:newtask});
     if(response.status!=200)console.log('bed response try update new mission:',response);
+    return response.data
   } catch (err) {
     console.log("error try post new task:", err);
   }
