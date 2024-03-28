@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 
 const tasksSchema = new mongoose.Schema({
-    id: String,
     type: {
         type: String,
         enum: ['privet', 'public'],
@@ -17,11 +16,12 @@ const tasksSchema = new mongoose.Schema({
     price: Number,
     notes: String,
     receiverPhone: String,
-    wehicleType: {
+    vehicleType: {
         type: String,
         enum: ['station', 'motor', 'car', ''],
         default: ''
     },
+    deliveryGuy:String,
     pickUpTime:Number,
     deliveryTime:{
         type:String,

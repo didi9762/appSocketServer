@@ -9,7 +9,8 @@ const url = `http://${baseUrl}`;
 async function updateOpenMissions(newtask) {
   try {
     const response = await axios.post(`${url}/server/newtask`, {newtask:newtask});
-    console.log("update open missions:", response.status);
+    if(response.status!=200)console.log('bed response try update new mission:',response);
+    return response.data
   } catch (err) {
     console.log("error try post new task:", err);
   }
@@ -18,7 +19,7 @@ async function updateOpenMissions(newtask) {
 async function updateMissionFunc(task) {
   try {
     const response = await axios.put(`${url}/server/changetask`, task);
-    console.log("update mission:", response.status);
+    if(response.status!=200)console.log('bed response try update exist mission:',response);
   } catch (err) {
     console.log("error try update mission:", err);
   }
@@ -38,9 +39,9 @@ async function closeMission(id){
   }catch(err){console.log('error try to hold task',err);}
 }
 
-async function rejectSave(id){
+async function rejectSave(id,userName){
   try{
-  const response = await axios.put(`${url}/server/reject`,{missionId:id})
+  const response = await axios.put(`${url}/server/reject`,{missionId:id,deliveryGuy:userName})
   return response.data
 }catch(err){console.log('error try to reject task:',err);}
 }
